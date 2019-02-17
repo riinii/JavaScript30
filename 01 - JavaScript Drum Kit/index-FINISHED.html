@@ -58,24 +58,27 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  
   function removeTransition(e) {
+    // only work with events that are transition
     if (e.propertyName !== 'transform') return;
     e.target.classList.remove('playing');
   }
 
+  // play audio and add 'playing' class that changes CSS
   function playSound(e) {
     const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
     const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
-    if (!audio) return;
+    if (!audio) return; // don't do anything if key did not represent any audio
 
-    key.classList.add('playing');
-    audio.currentTime = 0;
-    audio.play();
+    key.classList.add('playing'); // add class for key
+    audio.currentTime = 0; // set time to zero so on play audio will begin at zero again
+    audio.play(); 
   }
 
-  const keys = Array.from(document.querySelectorAll('.key'));
-  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-  window.addEventListener('keydown', playSound);
+  const keys = Array.from(document.querySelectorAll('.key')); 
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition)); //remove 'playing' class
+  window.addEventListener('keydown', playSound); //add 'playing' class and play audio
 </script>
 
 
