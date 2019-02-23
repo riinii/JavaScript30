@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Boba: Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</div></h2>
+<!-- <div class="wrapper"> -->
+  <div class="controls">
+    <input id="strawColor" type="color" name="straw" value="lightpink">
+    <label for="straw">Straw Color</label>
+    <br/>
+    <input id="liquidHeight" type="range" name="liquidHeight" min="0" max="97" value="97" data-sizing="%">
+    <label for="liquidHeight">Amount drunk</label>
+    <br/>
+  </div>
+<!-- </div> -->
+  <div id="drink">
+        <div id="straw"></div>
+        <div id="cup">
+            <div id="drunk"></div>
+            <div id="liquid">
+                <!-- Milk Tea -->
+                <div class="filling">
+                    <div class="boba"></div>
+                    <div class="boba"></div>
+                    <div class="boba"></div>
+                    <div class="boba"></div>
+                    <div class="boba"></div>
+                    <div class="boba"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <style>
+    :root {
+      /* my CSS Variables */
+      --straw: lightpink;
+      --spacing: 10px;
+      --blur: 10px;
+      --liquidHeight: 97%;
+      --drunk: 0%;
+    }
+
+    img {
+      /* put in your variables to css values! */
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
+
+    #drink{
+        height: 200px;
+    }
+    #cup{
+        margin: 0 auto;
+        height: 100%;
+        width: 120px;
+        background-color: white;
+        color: black;
+        position:relative;
+    }
+    #liquid{
+        color: black;
+        background-color: #efb402; /*var(--base);*/
+        width: 95%;
+        height: var(--liquidHeight);
+        vertical-align:bottom;
+        position: absolute;
+        bottom: 3px;
+        left: calc(5% / 2);
+    }
+    #drunk{
+        margin: 0 auto;
+        /* background-color: #efb402; */
+        background-color: white;
+        width: 95%;
+        height: var(--drunk);
+        padding-bottom: 3px;
+        position: relative;
+        z-index: 2;
+    }
+    #straw{
+        width: 20px;
+        height: 80px;
+        transform: skew(160deg);
+        background: var(--straw);
+        margin-left:calc(50% + 30px);
+    }
+    .boba {
+        display:inline-block;
+        height: 20px;
+        width: 20px;
+        background-color: black;
+        border-radius: 50%;
+    }
+    .filling{
+        position:absolute;
+        bottom: 0;
+        height: initial;
+    }
+    #eatBoba{
+        width: 100%;
+        height: var(--eatBoba);
+        background-color: #efb402; /*var(--base);*/
+        position:absolute;/*to allow overlap*/
+    }
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+      float:right;
+    }
+
+    input {
+      width: 100px;
+    }
+  </style>
+
+  <script>
+    const inputs = document.querySelectorAll('.controls input');
+
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || '';
+      // style.cssPropertyName = 'value';
+      // .setProperty allows for you to set priority too 
+      if (this.name === 'liquidHeight'){
+        document.documentElement.style.setProperty('--drunk', (98 -this.value) + suffix)
+      } 
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+    // function eatBoba(name, value) {
+    //     if (this.name === 'liquidHeight'){
+    //         document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    //     }
+    // }
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+  </script>
+
+
+</body>
+</html>
