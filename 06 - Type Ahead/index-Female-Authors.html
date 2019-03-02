@@ -7,19 +7,68 @@
   </head>
   <body>
     <form class="search-form">
-      Search for female authors who were born in the 1900's.
+      Search for female authors.
       <input type="text" class="search" placeholder="Female Author Name" />
       <ul class="suggestions">
         <li>Filter for Female Author Name</li>
-        <li>or a book title</li>
       </ul>
     </form>
 
     <script>
-      const endpoint = "https://ctan.org/json/2.0/authors";
+      const endpoint =
+        "https://raw.githubusercontent.com/riinii/JavaScript30/master/06%20-%20Type%20Ahead/authors.json";
 
-      const cities = [];
-      fetch(endpoint).then(blob => console.log(data));
+      const authors = [];
+      fetch(endpoint)
+        .then(blob => blob.json())
+        .then(data => authors.push(...data));
+
+      function findMatches(wordToMatch, authors) {
+        return authors.filter(author => {
+          // here we need to figure out if the city or state matches what was searched
+          const regex = new RegExp(wordToMatch, "gi");
+          return !author.female
+            ? false
+            : author.familyname
+            ? author.familyname.match(regex)
+            : author.givenname
+            ? author.givenname.match(regex)
+            : false;
+        });
+      }
+
+      function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function displayMatches() {
+        const matchArray = findMatches(this.value, authors);
+        const html = matchArray
+          .map(author => {
+            const regex = new RegExp(this.value, "gi");
+            const givenName = author.givenname.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            const familyName = author.familyname.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            return `
+        <li>
+          <span class="name">${givenName}, ${familyName}</span>
+        </li>
+      `;
+          })
+          .join("");
+        suggestions.innerHTML = html;
+      }
+
+      const searchInput = document.querySelector(".search");
+      const suggestions = document.querySelector(".suggestions");
+
+      searchInput.addEventListener("change", displayMatches);
+      searchInput.addEventListener("keyup", displayMatches);
     </script>
   </body>
 </html>
