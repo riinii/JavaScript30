@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Female Authors Type Ahead</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      Search for female authors who were born in the 1900's.
+      <input type="text" class="search" placeholder="Female Author Name" />
+      <ul class="suggestions">
+        <li>Filter for Female Author Name</li>
+        <li>or a book title</li>
+      </ul>
+    </form>
+
+    <script>
+      const endpoint = "https://ctan.org/json/2.0/authors";
+
+      const cities = [];
+      fetch(endpoint).then(blob => console.log(data));
+    </script>
+  </body>
+</html>
